@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./js/jquery.min.js"></script>
 </head>
 <body>
-
-<script>
+    <div id="app">
+        <input type="text" v-model="username">
+        {{username}}
+    </div>
+    <div>
+        <button id="test">检测按钮</button>
+    </div>
+<!-- <script>
     xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -15,7 +23,30 @@
     }
     xhr.open("GET", "http://localhost:8080/Bacikal_war_exploded/helloServlet",true);
     xhr.send();
-</script>
+</script> -->
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                username: "abv"
+            }
+        }
+    })
+    
+    $("#test").click(function(){
+        $.post("http://localhost:8080/Bacikal_war_exploded/register", {
+            username: "Lanscarlos",
+            password: "123456",
+            gender: "男"
+        },
+        function(data, status){
+            console.log(data)
+            console.log(status)
+        })
+    })
 
+
+</script>
 </body>
 </html>

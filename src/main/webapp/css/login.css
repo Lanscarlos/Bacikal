@@ -1,0 +1,80 @@
+body{
+    /* 设置背景渐变 */
+    background-image: linear-gradient(to left, #9c88ff,#3cadeb);
+    display: flex;
+    justify-content: center;
+}
+.container{
+    position:relative;
+    top: 100px;
+    width: 1100px;
+    height: 550px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.8);
+    display: flex;
+}
+.image{
+    width: 800px;
+    height: 550px;
+    background-image: url("../images/login.jpg");
+    /* 让图片适应大小 */
+    background-size: cover;
+}
+.info{
+    width: 300px;
+    height: 550px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.inner{
+    width: 250px;
+    height: 500px;
+}
+.inner h1{
+    font: 900 30px '';
+}
+/* .inner form{
+    margin-top: 30px;
+} */
+.username, .password{
+    width: 230px;
+    margin: 20px 0;
+    outline: none;
+    border: 0;
+    padding: 10px;
+    border-bottom: 3px solid rgb(80,80,170);
+    font: 900 16px '';
+}
+.reg{
+    float: right;
+    margin: 10px 0;
+    font: 500 16px '';
+    text-decoration: none;
+    color: black;
+}
+.error{
+    margin: 10px 10px;
+    font: 600 16px '';
+    color: rgb(255,100,100);
+}
+.btn_login{
+    user-select: none;
+    position: absolute;
+    margin: 20px;
+    bottom: 40px;
+    display: block;
+    width: 200px;
+    height: 60px;
+    font: 500 30px '';
+    color: azure;
+    text-decoration: none;
+    line-height: 60px;
+    border-radius: 30px;
+    background-image: linear-gradient(to left, #9c88ff,#3cadeb);
+    text-align: center;
+    transition: all 0.15s ease-in;
+}
+.btn_login:hover {
+    box-shadow: 0 0px 5px rgba(0,0,0,.8);
+}

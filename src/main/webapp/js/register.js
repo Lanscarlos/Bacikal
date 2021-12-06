@@ -40,17 +40,21 @@ let confirm = new InputObject('password-confirm', function(){
     }
 })
 
-$('.register').click(function(){
+$('#register').on('click', function(){
+    var $btn = $(this).button('loading')
     if(!vue.username.state) {
         username.blur()
+        $btn.button('reset')
         return
     }
     if(!vue.password.state) {
         password.blur()
+        $btn.button('reset')
         return
     }
     if(!vue.confirm.state) {
         confirm.blur()
+        $btn.button('reset')
         return
     }
     $.post(url + 'register', {
@@ -61,6 +65,7 @@ $('.register').click(function(){
         address: vue.address
     },function(data){
         $('#modal-msg .modal-body').html(data.message)
+        $btn.button('reset')
         if(data.result) {
             console.log('注册成功')
             $('#modal-msg').on('hidden.bs.modal', function (e) {

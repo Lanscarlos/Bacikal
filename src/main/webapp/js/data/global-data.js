@@ -1,2 +1,2 @@
 // var url = 'http://bacikal.faithl.com/'
-var url = 'http://lans.faithl.com/'
+var url = 'https://lans.faithl.com/'

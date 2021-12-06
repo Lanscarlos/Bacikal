@@ -31,7 +31,7 @@ public class VerifyFilter implements Filter {
         }
 
         String url = ((HttpServletRequest) request).getRequestURL().toString();
-        if(url.contains("/js/") || url.contains("login") || url.contains("register")) {
+        if(url.contains("/js/") || url.contains("/svg/") || url.contains("login") || url.contains("register")) {
             chain.doFilter(request, response);
             return;
         }

@@ -29,16 +29,20 @@ public class VerifyFilter implements Filter {
             res.getWriter().println("ok");
             return;
         }
-        chain.doFilter(request, response);
 
-//        response.setContentType("text/html;charset=utf-8");
-//        Object obj = ((HttpServletRequest) request).getSession().getAttribute("login");
-//        if (obj == null || !Objects.equals(obj.toString(), "true")) {
-//            System.out.println("未登录");
-//            request.getRequestDispatcher("login.html").forward(request, response);
-//        }else {
-//            System.out.println("已登录");
-//            chain.doFilter(request, response);
-//        }
+        String url = ((HttpServletRequest) request).getRequestURL().toString();
+        if(url.contains("/js/") || url.contains("login") || url.contains("register")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        Object obj = ((HttpServletRequest) request).getSession().getAttribute("uid");
+        if (obj == null) {
+            // 未登录
+            request.getRequestDispatcher("login.html").forward(request, response);
+        }else {
+            // 已登录
+            chain.doFilter(request, response);
+        }
     }
 }

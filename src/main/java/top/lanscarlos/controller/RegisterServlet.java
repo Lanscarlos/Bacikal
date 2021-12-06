@@ -42,6 +42,7 @@ public class RegisterServlet extends HttpServlet {
                 User user = dao.getUserByName(name);
                 if (user == null) {
                     json.addProperty("result", true);
+                    json.addProperty("message", "用户名可以使用");
                 }else {
                     json.addProperty("result", false);
                     json.addProperty("message", "用户名已被占用");
@@ -60,7 +61,13 @@ public class RegisterServlet extends HttpServlet {
             user.setAddress(address);
             user.setReg_time(reg_time);
 
-            json.addProperty("result", dao.addUser(user) > 0);
+            if(dao.addUser(user) > 0) {
+                json.addProperty("result", true);
+                json.addProperty("message", "注册成功！");
+            }else {
+                json.addProperty("result", false);
+                json.addProperty("message", "注册失败！请稍后再试！");
+            }
             sqlSession.commit();
         }
 

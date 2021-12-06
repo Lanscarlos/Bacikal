@@ -24,19 +24,39 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("application/json;charset=utf-8");
         SqlSession sqlSession = MybatisUtils.getSqlSession();
         UserDAO dao = sqlSession.getMapper(UserDAO.class);
-
-        User user = dao.getUserByName(request.getParameter("username"));
         JsonObject json = new JsonObject();
-        if (user != null && user.getPassword().equals(request.getParameter("password"))) {
+
+        String method = request.getParameter("method");
+        if ("user-logout".equalsIgnoreCase(method)) {
+            // 用户退出登录
             json.addProperty("result", true);
-            json.addProperty("message", "登录成功");
-            request.getSession().setAttribute("login", true);
+            json.addProperty("message", "成功登出");
+
+            // 移除登录信息
+            request.getSession().removeAttribute("uid");
+        }else if("user-login".equalsIgnoreCase(method)) {
+            // 用户尝试登录
+            User user = dao.getUserByName(request.getParameter("username"));
+
+            if (user != null && user.getPassword().equals(request.getParameter("password"))) {
+                json.addProperty("result", true);
+                json.addProperty("message", "登录成功！");
+
+                // 存储登录信息
+                request.getSession().setAttribute("uid", user.getUid());
+            }else {
+                json.addProperty("result", false);
+                json.addProperty("message", "用户名或密码错误！");
+            }
+
+            // 断开数据库连接
+            sqlSession.close();
         }else {
+            // 未知的请求
             json.addProperty("result", false);
-            json.addProperty("message", "用户名或密码错误");
+            json.addProperty("message", "未知的请求");
         }
 
-        sqlSession.close();
         response.getWriter().println(json);
     }
 }

@@ -4,28 +4,154 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bacikal - 登录</title>
-    <script src="./js/jquery.min.js"></script>
-	<link rel="stylesheet" href="css/login.css">
+    <title>Bacikal - 登录账户</title>
+
+    <!-- 前置插件 -->
+    <script src="depandencies/jquery.min.js"></script>
+    <script src="depandencies/vue.js"></script>
+    <script src="depandencies/tooltip.js" type="model"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="depandencies/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    
+    <!-- 初始化提示工具 -->
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+    <!-- 全局变量脚本 -->
+    <script src="js/data/global-data.js"></script>
+    <script src="js/utils/InputObject.js"></script>
+    
+    <style>
+        .container{
+            position: relative;
+            width: 70%;
+            top: 50px;
+        }
+        .left{
+            float: left;
+            height: 0px;
+            width: 50%;
+            margin: 50px auto;
+        }
+        .info{
+            float: right;
+            width: 40%;
+            margin: 60px 50px 50px auto;
+            border-radius: 15px;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+        }
+        .info .panel-body{
+            width: 60%;
+            margin: 70px auto 100px auto;
+        }
+        .form-group{
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .remember{
+            float: left;
+        }
+        .link-register{
+            margin-top: 2px;
+            float: right;
+        }
+        .btn-login{
+            margin: 100px auto 0px auto;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="image"></div>
-        <div class="info">
-            <div class="inner">
-                <h1> Bacikal <br> 登录您的账户 </h1>
-                <input type="text" class="username" placeholder="用户名">
-                <input type="password" class="password" placeholder="密码">
-                <a href="./register.html" class="reg">立即注册</a>
-                <div class="error">
-                    <span>用户名或密码错误</span>
+        <div class="page-header">
+            <h1>Bacikal <small>登录用户</small></h1>
+        </div>
+        
+        <div class="left">
+            <img src="svg/undraw_working_from_anywhere_re_9obt.svg">
+        </div>
+        
+        <div class="info panel panel-default">
+            <div class="panel-body">
+
+                <!-- 用户名 -->
+                <div class="username form-group has-feedback">
+                    <label class="control-label" for="inputSuccess2" data-toggle="tooltip" data-placement="right">用户名</label>
+                    <input type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" v-model="username.val">
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <span id="inputSuccess2Status" class="sr-only">(success)</span>
                 </div>
-                <span type="submit" class="btn_login">登录</span>
+
+                <!-- 密码 -->
+                <div class="password form-group has-feedback">
+                    <label class="control-label" for="inputWarning2" data-toggle="tooltip" data-placement="right">密码</label>
+                    <input type="password" class="form-control" id="inputWarning2" aria-describedby="inputWarning2Status" v-model="password.val">
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <span id="inputError2Status" class="sr-only">(error)</span>
+                </div>
+
+                <div>
+                    <label class="remember">
+                        <input type="checkbox" value="">
+                        记住我
+                    </label>
+                    <label class="link-register">
+                        <a href="register.html">未有账户， 前往注册</a>
+                    </label>
+                </div>
+                
+                <div class="btn-login">
+                    <button type="button" id="login" data-loading-text="登陆中..." class="btn btn-primary btn-lg btn-block">
+                        登录
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
 
-    <script src="./js/login.js"></script>
-
+    <!-- Modal -->
+    <div class="modal fade" id="modal-msg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">提示</h4>
+            </div>
+            <div class="modal-body">
+            ...
+            </div>
+            <div class="modal-footer">
+            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+            <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <script>
+        var vue = new Vue({
+            el: '.panel-body',
+            data() {
+                return {
+                    state: false,
+                    username: {
+                        state: false,
+                        val: ''
+                    },
+                    password: {
+                        state: false,
+                        val: ''
+                    }
+                }
+            }
+        })
+    </script>
+    <script src="js/login.js"></script>
 </body>
 </html>

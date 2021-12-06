@@ -1,96 +1,76 @@
-var username = $(".username")
-var password = $(".password")
-var confirm = $(".confirm")
-var btn_reg = $(".btn_reg")
 
-var result = -2
-var registrable = false
-
-$(".error, .right").hide()
-username.blur(function() {
-    result = -1
-    $.post("http://localhost:8080/Bacikal_war_exploded/register", {
-            method: "check-user",
-            username: username.val()
-        },
-        function(data, status){
-            if(data.result) {
-                result = 1
-                $(".error-username").hide()
-                $(".right-username").show()
-            }else{
-                result = 0
-                $(".error-username").show()
-                $(".right-username").hide()
-                $(".msg-username span").html(data.message)
-            }
-        })
-})
-confirm.blur(function() {
-    if(password.val() == "") {
-        $(".error-password").show()
-        $(".right-password").hide()
-        $(".msg-password span").html("请输入密码")
-        return
-    }
-    if(confirm.val() != password.val()) {
-        $(".error-password").show()
-        $(".right-password").hide()
+let username = new InputObject('username', function(){
+    if(vue.username.val == '') {
+        username.showTip('请输入用户名')
+        username.setState(false)
     }else {
-        $(".error-password").hide()
-        $(".right-password").show()
-    }
-})
-btn_reg.click(function(){
-    if(result == -2 || username.val() == "") {
-        $(".error-username").show()
-        $(".right-username").hide()
-        $(".msg-username span").html("请输入用户名")
-        return
-    }
-    if(result == -1){
-        alert("正在验证用户名...请耐心等待...")
-        return
-    }else if(result == 0) {
-        $(".error-username").show()
-        $(".right-username").hide()
-        $(".msg-username span").html("用户名已被占用")
-    }
-    if(password.val() == "") {
-        $(".error-password").show()
-        $(".right-password").hide()
-        $(".msg-password span").html("请输入密码")
-        return
-    }
-    if(confirm.val() != password.val()) {
-        $(".error-password").show()
-        $(".right-password").hide()
-        $(".msg-password span").html("两次输入的密码不一致  ")
-        return
-    }
-    $.post("http://localhost:8080/Bacikal_war_exploded/register", {
-            method: "check-user",
-            username: username.val()
-        },
-        function(data, status){
+        $.post(url + 'register', {
+            method: 'check-user',
+            username: vue.username.val
+        },function(data){
             if(data.result) {
-                result = 1
-                $(".error-username").hide()
-                $(".right-username").show()
-                $.post("http://localhost:8080/Bacikal_war_exploded/register", {
-                        method: "register-user",
-                        username: username.val(),
-                        password: password.val()
-                    },
-                    function(data, status){
-                        alert(data.result)
-                        $(location).attr('href', './login.html')
-                    })
-            }else{
-                result = 0
-                $(".error-username").show()
-                $(".right-username").hide()
-                $(".msg-username span").html(data.message)
+                username.hideTip()
+                username.setState(true)
+            }else {
+                username.showTip(data.message)
+                username.setState(false)
             }
         })
+    }
+})
+let password = new InputObject('password', function(){
+    if(vue.password.val == '') {
+        password.showTip('请输入密码')
+        password.setState(false)
+    }else {
+        password.hideTip()
+        password.setState(true)
+    }
+    if(vue.confirm.val != '' && vue.password.val != vue.confirm.val) {
+        confirm.blur()
+    }
+})
+let confirm = new InputObject('password-confirm', function(){
+    if(vue.confirm.val == '' || vue.password.val != vue.confirm.val) {
+        confirm.showTip(vue.confirm == '' ? '请输入密码' : '两次输入的密码不一致')
+        confirm.setState(false)
+    }else {
+        confirm.hideTip()
+        confirm.setState(true)
+    }
+})
+
+$('.register').click(function(){
+    if(!vue.username.state) {
+        username.blur()
+        return
+    }
+    if(!vue.password.state) {
+        password.blur()
+        return
+    }
+    if(!vue.confirm.state) {
+        confirm.blur()
+        return
+    }
+    $.post(url + 'register', {
+        method: 'register-user',
+        username: vue.username.val,
+        password: vue.password.val,
+        gender: vue.gender,
+        address: vue.address
+    },function(data){
+        $('#modal-msg .modal-body').html(data.message)
+        if(data.result) {
+            console.log('注册成功')
+            $('#modal-msg').on('hidden.bs.modal', function (e) {
+                // 延迟 0.5 秒后跳转至登录界面
+                $(location).delay(500).attr('href', 'login.html')
+            }).modal('show')
+        }else {
+            console.log('注册失败')
+            // 刷新当前页面
+            location.reload();
+        }
+    })
 })

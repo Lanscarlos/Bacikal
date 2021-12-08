@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.lanscarlos.dao.GoodDAO">
+
+    <select id="selectAll" resultType="top.lanscarlos.pojo.Good">
+        select *
+        from good;
+    </select>
+
+    <select id="selectByGid" resultType="top.lanscarlos.pojo.Good">
+        select *
+        from good where gid = #{gid};
+    </select>
+
+    <select id="selectByName" resultType="top.lanscarlos.pojo.Good">
+        select *
+        from good where name like #{name};
+    </select>
+
+<!--    <select id="selectBySid" resultType="top.lanscarlos.pojo.Good">-->
+<!--        select *-->
+<!--        from good where sid = #{sid};-->
+<!--    </select>-->
+
+    <select id="selectByCategory" resultType="top.lanscarlos.pojo.Good">
+        select *
+        from good as g inner join category c on c.cid=g.cid
+        where c.name = #{name};
+    </select>
+
+    <select id="selectByCondition" resultType="top.lanscarlos.pojo.Good">
+        select *
+        from good
+        inner join category c on good.cid = c.cid
+        <where>
+            <if test="gid !=null and gid !=''">
+                and gid =  #{gid}
+            </if>
+            <if test="name != null and name != '' ">
+                and good.name like #{name}
+            </if>
+            <if test="category !=null and category != '' ">
+                and c.name  = #{category}
+            </if>
+        </where>
+    </select>
+
+</mapper>

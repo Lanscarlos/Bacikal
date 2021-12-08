@@ -1,5 +1,6 @@
 package top.lanscarlos.controller;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.ibatis.session.SqlSession;
@@ -14,7 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @WebServlet(name = "RegisterServlet", value = "/register")
@@ -61,9 +64,13 @@ public class RegisterServlet extends HttpServlet {
             user.setAddress(address);
             user.setReg_time(reg_time);
 
+            List<User> users = new ArrayList<>();
+
             if(dao.addUser(user) > 0) {
                 json.addProperty("result", true);
                 json.addProperty("message", "注册成功！");
+                json.addProperty("json", new Gson().toJson(user));
+//                json.add("asdd");
             }else {
                 json.addProperty("result", false);
                 json.addProperty("message", "注册失败！请稍后再试！");

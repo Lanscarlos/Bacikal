@@ -49,11 +49,6 @@ public class CartServlet extends HttpServlet {
         if("".equals(uid)){
             uid = String.valueOf(request.getSession().getAttribute("user"));
         }
-//        String uid = request.getParameter("uid");
-//        String[] gids = request.getParameterValues("gids");
-//        String gid = request.getParameter("gid");
-        //添加的数量
-//        int number = Integer.parseInt(request.getParameter("number"));      //null
         String add_time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
         JsonObject json = new JsonObject();

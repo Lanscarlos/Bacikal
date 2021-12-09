@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "CartServlet",urlPatterns = "/cart")
 public class CartServlet extends HttpServlet {
@@ -44,12 +45,15 @@ public class CartServlet extends HttpServlet {
          * 获取uid的所有的gid,进行遍历将对应的商品信息和由gid获得amount、add_time等信息分成两个进行发送。
          * uid--->gid--->遍历--->商品信息：name/price/description/image--->在gid的good中
          */
-
         String uid = request.getParameter("uid");
-        String[] gids = request.getParameterValues("gids");
-        String gid = request.getParameter("gid");
+        if("".equals(uid)){
+            uid = String.valueOf(request.getSession().getAttribute("user"));
+        }
+//        String uid = request.getParameter("uid");
+//        String[] gids = request.getParameterValues("gids");
+//        String gid = request.getParameter("gid");
         //添加的数量
-        int number = Integer.parseInt(request.getParameter("number"));
+//        int number = Integer.parseInt(request.getParameter("number"));      //null
         String add_time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
         JsonObject json = new JsonObject();
@@ -59,25 +63,30 @@ public class CartServlet extends HttpServlet {
                 case "selectInfo":
                     /*查询信息*/
                     List<Cart> carts = cdao.selectByUid(uid);
-                    List<String> list = new ArrayList<String>();
+//                    List<String> list = new ArrayList<String>();
                     List<Good> goodList = new ArrayList<Good>();
                     for (Cart cart : carts) {
                         String cartGid = cart.getGid();
-                        /*获取用户的所有gid*/
-                        list.add(cartGid);
-                    }
-                    for (String s : list) {
-                        Good goodInfo = gdao.selectByGid(s);
+                        Good goodInfo = gdao.selectByGid(cartGid);
                         goodList.add(goodInfo);
                     }
+//                    }
                     /*cart的用户信息*/
                     json.addProperty("carts",new Gson().toJson(carts));
                     /*用户购买的在good表对应的信息*/
-                    json.addProperty("goodList",new Gson().toJson(goodList));
+                    json.addProperty("goods",new Gson().toJson(goodList));
                     json.addProperty("result",true);
                     break;
                 case "deleteByIds":
                     /*批量删除*/
+//                    for(Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()){
+//                        for(String s : entry.getValue()){
+//                            System.out.println("key-> "+entry.getKey() + " value-> "+s);
+//                        }
+//                    }
+//                    System.out.println("xxx1 -> " + request.getParameter("gids[]"));
+//                    System.out.println("xxx2 -> " + request.getParameterValues("gids[]"));
+                    String[] gids = request.getParameterValues("gids[]");
                     int rows = cdao.deleteByIds(uid,gids);
                     if (rows>0){
                             //删除成功
@@ -90,6 +99,8 @@ public class CartServlet extends HttpServlet {
                     }
                     break;
                 case "increaseInfo":
+                    int number = Integer.parseInt(request.getParameter("number"));
+                    String gid = request.getParameter("gid");
                     //判断插入还是添加
                     Cart isempty = cdao.isEmpty(gid);
                     Cart cart = new Cart();

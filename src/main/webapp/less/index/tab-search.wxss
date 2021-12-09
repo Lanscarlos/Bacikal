@@ -1,0 +1,32 @@
+#tab-search .waterfall {
+  width: 100%;
+  columns: 3;
+  column-gap: 30px;
+}
+#tab-search .thumbnail {
+  break-inside: avoid;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+#tab-search .thumbnail img {
+  margin-top: 40px;
+  border-radius: 10px;
+}
+#tab-search .thumbnail h3 {
+  padding: 8px 0;
+  margin-left: 10px;
+}
+#tab-search .thumbnail h4 {
+  margin-left: 20px;
+  font-weight: 600;
+  color: #6464ff;
+}
+#tab-search .thumbnail p {
+  color: #555;
+  margin-left: 10px;
+}
+#tab-search .thumbnail a {
+  margin-top: 30px;
+  margin-right: 10px;
+}

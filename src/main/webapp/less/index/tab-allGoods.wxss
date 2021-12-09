@@ -1,0 +1,33 @@
+#tab-allGoods .waterfall {
+  width: 100%;
+  columns: 3;
+  column-gap: 30px;
+}
+#tab-allGoods .thumbnail {
+  break-inside: avoid;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+#tab-allGoods .thumbnail img {
+  margin-top: 40px;
+  width: 80%;
+  border-radius: 10px;
+}
+#tab-allGoods .thumbnail h3 {
+  padding: 8px 0;
+  margin-left: 10px;
+}
+#tab-allGoods .thumbnail h4 {
+  margin-left: 20px;
+  font-weight: 600;
+  color: #6464ff;
+}
+#tab-allGoods .thumbnail p {
+  color: #555;
+  margin-left: 10px;
+}
+#tab-allGoods .thumbnail a {
+  margin-top: 30px;
+  margin-right: 10px;
+}

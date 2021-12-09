@@ -1,0 +1,31 @@
+.container {
+  margin-top: 100px;
+}
+#user-info div {
+  height: 20px;
+}
+#user-avatar {
+  margin-top: -5px;
+}
+#carousel-example-generic {
+  margin-top: 0px;
+}
+.item {
+  height: 600px;
+}
+.left span,
+.right span {
+  opacity: 0;
+}
+.left:hover span,
+.right:hover span {
+  opacity: 1;
+}
+#user-cart {
+  position: absolute;
+  right: 67px;
+}
+#user-info {
+  position: absolute;
+  right: 20px;
+}

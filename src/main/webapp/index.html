@@ -2,18 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bacikal - 商城首页</title>
+    <title>Bacikal - 正品低价、品质保证</title>
     <script src="depandencies/jquery.min.js"></script>
     <script src="depandencies/vue.js"></script>
-    <link rel="stylesheet/less" type="text/css" href="less/index.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/index/index.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/index/tab-allGoods.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/index/tab-search.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/index/tab-cart.less" />
     <script src="depandencies/less.min.js"></script>
     <script src="depandencies/tooltip.js" type="model"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <script src="depandencies/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    
+    <!-- 初始化提示工具 -->
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    
+    <!-- 全局变量脚本 -->
+    <script src="js/data/global-data.js"></script>
 
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav id="index-navbar" class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
           <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -32,10 +48,13 @@
       
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <!-- Nav tabs -->
-                <ul class="nav navbar-nav" role="tablist">
+
+                <!-- 分页导航条 Nav tabs -->
+                <ul id="nav-tabs" class="nav navbar-nav" role="tablist">
+
+                    
                     <li role="presentation" class="active"><a id="tab-controller-home" href="#tab-home" aria-controls="tab-home" role="tab" data-toggle="tab">双十二专场</a></li>
-                    <li role="presentation"><a id="tab-controller-profile" href="#tab-profile" aria-controls="tab-profile" role="tab" data-toggle="tab">秋冬季特卖</a></li>
+                    <li role="presentation"><a id="tab-controller-goods-all" href="#tab-allGoods" aria-controls="tab-allGoods" role="tab" data-toggle="tab">秋冬季特卖</a></li>
                     <li role="presentation" class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多特惠 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -48,55 +67,51 @@
                             <li role="presentation"><a href="#tab-messages" aria-controls="tab-messages" role="tab" data-toggle="tab">成为商家</a></li>
                         </ul>
                     </li>
-                </ul>
-                <div class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
+                    
+                    <!-- 搜索部分 -->
+                    <div class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <input id="input-search" type="text" class="form-control" placeholder="Search" data-toggle="tooltip" data-placement="bottom" v-model='search.val'>
+                        </div>
+                        <button id="btn-search" type="submit" class="btn btn-default" data-loading-text="搜索中..." @click="searchGoods">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            搜索
+                        </button>
                     </div>
-                    <button type="submit" class="btn btn-default">
-                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                        搜索
-                    </button>
-                </div>
+                    <li role="presentation" style="display: none;"><a id="tab-controller-search" href="#tab-search" aria-controls="tab-search" role="tab" data-toggle="tab">搜索</a></li>
+                    <li role="presentation" style="display: none;"><a id="tab-controller-search-cover" href="#tab-search-cover" aria-controls="tab-search-cover" role="tab" data-toggle="tab">搜索-遮挡</a></li>
+                    <!-- 搜索部分 End -->
 
-                <!-- 右边部分 -->
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" onclick="reduce();return false">
+                    <!-- 购物车部分 -->
+                    <li id="user-cart" role="presentation"><a id="tab-controller-cart" href="#tab-cart" aria-controls="tab-cart" role="tab" data-toggle="tab">
                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                         我的购物车
                     </a></li>
+                    <!-- 购物车部分 End -->
 
-                    <!-- 下拉菜单 用户信息 -->
-                    <li id="user-info" class="dropdown">
-                        <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a> -->
+                    <!-- 用户信息 - 头像 部分 -->
+                    <li id="user-info" role="presentation" class="navbar-right dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <div>
                                 <img id="user-avatar" src="svg/undraw_male_avatar_323b.svg" width="32px">
                             </div>
                         </a>
                         <ul class="dropdown-menu">
-                            <li>
-                                <a href="#" onclick="return false">
-                                    <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                                    我的购物车
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="return false">
-                                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-                                    我的订单
-                                </a>
-                            </li>
+                            <li role="presentation"><a href="#tab-purchase" aria-controls="tab-purchase" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                我的订单
+                            </a></li>
                             <li role="separator" class="divider"></li>
-                            <li>
-                                <a href="#" onclick="return false">
+                            <li><a href="#" onclick="return false">
                                     <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
                                     退出
-                                </a>
-                            </li>
+                            </a></li>
                         </ul>
                     </li>
+                    <!-- 用户信息 - 头像 部分 End -->
+
                 </ul>
+
 
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
@@ -163,119 +178,193 @@
 
             </div>
         </div> <!-- Home Tab End -->
-        <div role="tabpanel" class="tab-pane fade" id="tab-profile">
+        
+        <div role="tabpanel" class="tab-pane fade" id="tab-allGoods">
 
             <div class="container">
+                <div class="page-header">
+                    <h1>秋冬季特卖 <small>快来把我带回家吧！</small></h1>
+                </div>
                 <div class="waterfall">
                     <div class="thumbnail" v-for="(good) in goods">
                         <img :src="good.image" :alt="good.name">
                         <div class="caption">
-                            <h3>{{good.name}}<small>¥{{good.price}}.00</small></h3>
+                            <h3>{{good.name}}</h3>
+                            <h4>¥{{good.price}}.00</h4>
                             <p><span class="label label-info">简介</span> {{good.description}}</p>
                             <p><span class="label label-success">库存</span> 剩余 {{good.stock}} 件</p>
                             <p class="text-right">
-                                <a href="#" class="btn btn-default" role="button" onclick="purchase()">立即购买</a>
-                                <a href="#" class="btn btn-primary" role="button" onclick="addToCrat()">加入购物车</a>
+                                <a href="#" class="btn btn-default" role="button" @click="showPurchaseModal(good.gid)">立即购买</a>
+                                <a href="#" class="btn btn-primary" role="button" @click="showCartModal(good.gid)">加入购物车</a>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="modal fade" id="purchaseModal" tabindex="-1" role="dialog" aria-labelledby="purchaseModalLabel">
+            <div class="modal fade" id="tab-allGoods-Modal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="purchaseModalLabel">请输入购买数量</h4>
+                            <h4 class="modal-title" id="cartModalLabel">请输入购买数量</h4>
                         </div>
                         <div class="modal-body">
                             <label for="purchase-amount" class="control-label">数量</label>
-                            <div class="input-group">
-                                <a class="btn btn-default input-group-addon" onclick="if(vue.purchase.amount > 1) {vue.purchase.amount--}"> <strong> - </strong> </a>
-                                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" v-model="purchase.amount" readonly>
-                                <a class="btn btn-default input-group-addon" onclick="vue.purchase.amount++"><strong> + </strong></a>
+                            <div style="display: inline-flex;">
+                                <button class="btn btn-default" @click="subAmount"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" v-model="modal.amount" readonly>
+                                <button class="btn btn-primary" @click="addAmount"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" id="purchase-confirm">确认</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="cratModal" tabindex="-1" role="dialog" aria-labelledby="cratModalLabel">
-                <div class="modal-dialog modal-sm" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="cratModalLabel">请输入购买数量</h4>
-                        </div>
-                        <div class="modal-body">
-                            <label for="purchase-amount" class="control-label">数量</label>
-                            <div class="input-group">
-                                <a class="btn btn-default input-group-addon" onclick="if(vue.purchase.amount > 1) {vue.purchase.amount--}"> <strong> - </strong> </a>
-                                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" v-model="purchase.amount" readonly>
-                                <a class="btn btn-default input-group-addon" onclick="vue.purchase.amount++"><strong> + </strong></a>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" id="crat-confirm">确认</button>
+                            <button type="button" class="btn btn-primary" data-loading-text="......." @click="commit">确认</button>
                         </div>
                     </div>
                 </div>
             </div>
 
         </div> <!-- Home Tab End -->
-        <div role="tabpanel" class="tab-pane fade" id="tab-messages">
-            asdasdadad
-        </div> <!-- Home Tab End -->
-        <div role="tabpanel" class="tab-pane fade" id="tab-settings">
-            sadada
-        </div> <!-- Home Tab End -->
+
+        <div role="tabpanel" class="tab-pane fade" id="tab-search">
+            <div class="container">
+                <div class="page-header">
+                    <h1>搜索 <small>{{search.display}}</small></h1>
+                </div>
+                <div v-if="goods.length > 0" class="waterfall">
+                    <div class="thumbnail" v-for="(good) in goods">
+                        <img :src="good.image" :alt="good.name">
+                        <div class="caption">
+                            <h3>{{good.name}}</h3>
+                            <h4>¥{{good.price}}.00</h4>
+                            <p><span class="label label-info">简介</span> {{good.description}}</p>
+                            <p><span class="label label-success">库存</span> 剩余 {{good.stock}} 件</p>
+                            <p class="text-right">
+                                <a href="#" class="btn btn-default" role="button" @click="showPurchaseModal(good.gid)">立即购买</a>
+                                <a href="#" class="btn btn-primary" role="button" @click="showCartModal(good.gid)">加入购物车</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div v-else style="text-align: center;">
+                    <img src="svg/undraw_page_not_found_re_e9o6.svg" height="300">
+                    <h2 style="margin: 50px auto 100px auto;">没有找到相关商品噢！换个关键词试试吧！</h2>
+                </div>
+            </div>
+
+            <div class="modal fade" id="tab-search-Modal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="cartModalLabel">请输入购买数量</h4>
+                        </div>
+                        <div class="modal-body">
+                            <label for="purchase-amount" class="control-label">数量</label>
+                            <div style="display: inline-flex;">
+                                <button class="btn btn-default" @click="subAmount"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" v-model="modal.amount" readonly>
+                                <button class="btn btn-primary" @click="addAmount"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" data-loading-text="......." @click="commit">确认</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- Search Tab End -->
+        
+        <div role="tabpanel" class="tab-pane fade" id="tab-search-cover">
+            <div class="container">
+                <div class="page-header">
+                    <h1>搜索 <small>正在搜索中...请稍后...</small></h1>
+                </div>
+            </div>
+        </div> <!-- Search Cover Tab End -->
+
+        <div role="tabpanel" class="tab-pane fade" id="tab-cart">
+            <div class="container">
+                <div class="page-header">
+                    <h1>我的购物车 <small>快来把我带回家吧！</small></h1>
+                </div>
+
+                <ul v-if="carts.length > 0" class="list-group">
+                    <li class="list-group-item" v-for="(cart, index) in carts">
+                        
+                        <label class="cart-checkbox" @click="select($event, index)"><input type="checkbox" :checked="cart.check"></label>
+                        <a href="#">
+                            <img :src="cart.image" :alt="cart.name" class="img-thumbnail">
+                        </a>
+                        <div class="cart-info">
+                            <div>
+                                <h3>{{cart.name}}</h3>
+                                <h4>¥{{cart.price}}.00</h4>
+                                <p><span class="label label-info">简介</span> {{cart.description}}</p>
+                                <p><span class="label label-success">库存</span> 剩余 {{cart.stock}} 件</p>
+                            </div>
+                        </div>
+                        <div class="cart-control">
+                            <button class="btn btn-default" style="margin-right: 10px;" data-loading-text="..." @click="remove($event, index)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                            <button class="btn btn-default" data-loading-text="..." @click="subtract($event, index)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                            <span class="cart-control-amount">{{cart.amount}}</span>
+                            <button class="btn btn-primary" data-loading-text="..." @click="add($event, index)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                        </div>
+                    </li>
+                </ul>
+                <div v-else style="text-align: center;">
+                    <img src="svg/undraw_page_not_found_re_e9o6.svg" height="300">
+                    <h2 style="margin: 50px auto 100px auto;">你的购物车空空如也噢！</h2>
+                </div>
+            </div>
+
+            <!-- 底部购买导航条 -->
+            <nav class="navbar navbar-default navbar-fixed-bottom">
+                <div class="container-fluid">
+
+                    <div class="navbar-header">
+                        <div class="checkbox navbar-text">
+                            <label @click="select($event, -1)"><input type="checkbox" :checked="allSelect"> 全选</label>
+                            <button class="btn btn-default" style="margin-left: 20px;" data-loading-text="..." @click="remove($event, -1)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                        </div>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse">
+                        <div class="navbar-form navbar-right">
+                            <div class="form-group">
+                                <p class="nav navbar-nav">
+                                    <strong>合计: </strong>
+                                    <span class="cart-sum">¥ {{sum}}.00</span>
+                                </p>
+                            </div>
+                            <button id="btn-search" type="submit" class="btn btn-primary" data-loading-text="结算中...">
+                                <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+                                结算
+                            </button>
+                        </div>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+
+        </div> <!-- Cart Tab End -->
+
+        <div role="tabpanel" class="tab-pane fade" id="tab-purchase">
+            <div class="container">
+                <div class="page-header">
+                    <h1>我的订单 <small>你下单的宝贝都在这里哦！</small></h1>
+                </div>
+            </div>
+        </div> <!-- Purchase Tab End -->
     </div>
 
-    <script>
-        var vue = new Vue({
-            el: '.tab-content',
-            data() {
-                return {
-                    carousel:{
-                        url_0: 'https://gtms01.alicdn.com/tps/i1/TB1r4h8JXXXXXXoXXXXvKyzTVXX-520-280.jpg',
-                        url_1: 'https://gtms01.alicdn.com/tps/i2/TB10vPXKpXXXXacXXXXvKyzTVXX-520-280.jpg',
-                        url_2: 'https://gtms01.alicdn.com/tps/i3/TB1gXd1JXXXXXapXpXXvKyzTVXX-520-280.jpg'
-                    },
-                    purchase: {
-                        amount: 1
-                    },
-                    goods: [
-                        {
-                            gid: '',
-                            cid: '',
-                            sid: '',
-                            name: '太生草了',
-                            description: 'wogan!',
-                            image: 'image/good/default.webp',
-                            stock: 0,
-                            price: 198
-                        }
-                    ]
-                }
-            }
-        })
-        // $('#tab-controller-profile').tab('show')
-        // $('#tab-controller-profile').on('show.bs.tab', function(e){
-        //     console.log('检测...')
-        // })
-        // $.post('http://172.16.109.209:8080/Bacikal_war_exploded/good',{
-        //     gid: '0001'
-        // },function(data){
-        //     console.log('检测到返回...')
-        //     console.log(eval(data.goods))
-        //     vue.goods = eval(data.goods)
-        // })
-    </script>
-    <script src="js/index.js"></script>
+    <script src="js/page/index/index.js"></script>
+    <script src="js/page/index/tab-home.js"></script>
+    <script src="js/page/index/tab-allGoods.js"></script>
+    <script src="js/page/index/tab-search.js"></script>
+    <script src="js/page/index/tab-cart.js"></script>
 </body>
 </html>

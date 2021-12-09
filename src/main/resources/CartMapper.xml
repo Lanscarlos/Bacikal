@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.lanscarlos.dao.CartDAO">
+
+    <select id="selectByUid" resultType="top.lanscarlos.pojo.Cart">
+        select *
+        from cart
+        where uid = #{uid};
+    </select>
+
+    <select id="selectAmountByGid" resultType="top.lanscarlos.pojo.Cart">
+        select *
+        from cart
+        where gid=#{gid};
+    </select>
+
+    <select id="isEmpty" resultType="top.lanscarlos.pojo.Cart">
+        select *
+        from cart
+        where gid=#{gid};
+    </select>
+
+    <insert id="insertById">
+        insert into cart(gid,uid,amount,add_time)
+        values(#{gid}, #{uid}, #{amount}, #{add_time});
+    </insert>
+
+    <update id="updateById">
+        update cart
+        set amount=#{amount},add_time=#{add_time}
+        where gid=#{gid};
+    </update>
+
+    <delete id="deleteByIds">
+    delete from cart
+    <where> uid=#{uid} and
+    gid in <foreach collection="gids" item="gid" separator="," open="(" close=")">
+    #{gid}
+    </foreach>
+    ;
+    </where>
+    </delete>
+</mapper>

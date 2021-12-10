@@ -102,7 +102,7 @@
                                 我的订单
                             </a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#" onclick="return false">
+                            <li><a href="#" @click="logout">
                                     <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
                                     退出
                             </a></li>
@@ -183,7 +183,7 @@
 
             <div class="container">
                 <div class="page-header">
-                    <h1>秋冬季特卖 <small>快来把我带回家吧！</small></h1>
+                    <h1>秋冬季特卖 <small>快来把我带回家吧!</small></h1>
                 </div>
                 <div class="waterfall">
                     <div class="thumbnail" v-for="(good) in goods">
@@ -249,7 +249,7 @@
                 </div>
                 <div v-else style="text-align: center;">
                     <img src="svg/undraw_page_not_found_re_e9o6.svg" height="300">
-                    <h2 style="margin: 50px auto 100px auto;">没有找到相关商品噢！换个关键词试试吧！</h2>
+                    <h2 style="margin: 50px auto 100px auto;">没有找到相关商品噢! 换个关键词试试吧!</h2>
                 </div>
             </div>
 
@@ -289,7 +289,7 @@
         <div role="tabpanel" class="tab-pane fade" id="tab-cart">
             <div class="container">
                 <div class="page-header">
-                    <h1>我的购物车 <small>快来把我带回家吧！</small></h1>
+                    <h1>我的购物车 <small>快来把我带回家吧!</small></h1>
                 </div>
 
                 <ul v-if="carts.length > 0" class="list-group">
@@ -317,7 +317,7 @@
                 </ul>
                 <div v-else style="text-align: center;">
                     <img src="svg/undraw_page_not_found_re_e9o6.svg" height="300">
-                    <h2 style="margin: 50px auto 100px auto;">你的购物车空空如也噢！</h2>
+                    <h2 style="margin: 50px auto 100px auto;">你的购物车空空如也噢!</h2>
                 </div>
             </div>
 
@@ -355,7 +355,7 @@
         <div role="tabpanel" class="tab-pane fade" id="tab-purchase">
             <div class="container">
                 <div class="page-header">
-                    <h1>我的订单 <small>你下单的宝贝都在这里哦！</small></h1>
+                    <h1>我的订单 <small>你下单的宝贝都在这里哦!</small></h1>
                 </div>
             </div>
         </div> <!-- Purchase Tab End -->

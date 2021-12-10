@@ -43,12 +43,20 @@ const vue = new Vue({
                 })
 
             }
+        },
+
+        /**
+         * 用户登出
+         */
+        logout: function() {
+            $.post(url + 'login', {
+                method: 'user-logout'
+            }, function(data) {
+                // 判断返回的结果 是否已成功登出
+                if(data.result) {
+                    $(location).delay(500).attr('href', 'login.html')
+                }
+            })
         }
     }
 })
-
-
-// vue.cart.carts.forEach((element, index, array) => {
-//     // console.log(element)
-//     element.check = true
-// });

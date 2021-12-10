@@ -11,7 +11,11 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet(name = "LoginServlet", value = "/login")
+/**
+ * 用户相关操作全部转移至 UserServlet
+ * */
+@Deprecated
+//@WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
 
     @Override

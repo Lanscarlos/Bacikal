@@ -20,7 +20,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@WebServlet(name = "RegisterServlet", value = "/register")
+/**
+ * 用户相关操作全部转移至 UserServlet
+ * */
+@Deprecated
+//@WebServlet(name = "RegisterServlet", value = "/register")
 public class RegisterServlet extends HttpServlet {
 
     @Override

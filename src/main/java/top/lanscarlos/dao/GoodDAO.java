@@ -1,7 +1,9 @@
 package top.lanscarlos.dao;
 
 import org.apache.ibatis.annotations.Param;
+import top.lanscarlos.pojo.Category;
 import top.lanscarlos.pojo.Good;
+import top.lanscarlos.pojo.Shop;
 
 import java.util.List;
 
@@ -62,4 +64,8 @@ public interface GoodDAO {
 //    Good insert(String gid,String sid,String name,String description,String image,String stock,String puaway_time);
 
     int update(Good good);
+
+    List<Shop> getAllShop();
+
+    List<Category> getAllCategory();
 }

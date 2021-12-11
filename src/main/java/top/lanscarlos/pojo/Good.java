@@ -13,7 +13,11 @@ public class Good {
     private int stock;
     private double price;
     private String putaway_time;
+
+    // 附加属性
+    private String shop;
     private String category;
+
     public Good(){
 
     }
@@ -108,6 +112,14 @@ public class Good {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getShop() {
+        return shop;
+    }
+
+    public void setShop(String shop) {
+        this.shop = shop;
     }
 
     @Override

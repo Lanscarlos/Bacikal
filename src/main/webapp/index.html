@@ -60,13 +60,13 @@
                     <li role="presentation" class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多特惠 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li role="presentation"><a href="#tab-messages" aria-controls="tab-messages" role="tab" data-toggle="tab">美妆个护</a></li>
-                            <li role="presentation"><a href="#tab-messages" aria-controls="tab-messages" role="tab" data-toggle="tab">书籍书刊</a></li>
-                            <li role="presentation"><a href="#tab-messages" aria-controls="tab-messages" role="tab" data-toggle="tab">数码媒体</a></li>
+                            <li class="disabled"><a href="" onclick="return false">美妆个护</a></li>
+                            <li class="disabled"><a href="" onclick="return false">书籍书刊</a></li>
+                            <li class="disabled"><a href="" onclick="return false">数码媒体</a></li>
                             <li role="separator" class="divider"></li>
-                            <li role="presentation"><a href="#tab-messages" aria-controls="tab-messages" role="tab" data-toggle="tab">红包大放送</a></li>
+                            <li class="disabled"><a href="" onclick="return false">红包大放送</a></li>
                             <li role="separator" class="divider"></li>
-                            <li role="presentation"><a href="#tab-messages" aria-controls="tab-messages" role="tab" data-toggle="tab">成为商家</a></li>
+                            <li class="disabled"><a href="" onclick="return false">成为商家</a></li>
                         </ul>
                     </li>
                     
@@ -103,7 +103,7 @@
                                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                 我的信息
                             </a></li>
-                            <li role="presentation"><a href="#tab-purchase" aria-controls="tab-purchase" role="tab" data-toggle="tab">
+                            <li role="presentation"><a id="tab-controller-purchase" href="#tab-purchase" aria-controls="tab-purchase" role="tab" data-toggle="tab">
                                 <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
                                 我的订单
                             </a></li>
@@ -192,16 +192,18 @@
                     <h1>秋冬季特卖 <small>快来把我带回家吧!</small></h1>
                 </div>
                 <div class="waterfall">
-                    <div class="thumbnail" v-for="(good) in goods">
+                    <div class="thumbnail" v-for="(good, index) in goods">
                         <img :src="good.image" :alt="good.name">
                         <div class="caption">
                             <h3>{{good.name}}</h3>
                             <h4>¥{{good.price}}.00</h4>
                             <p><span class="label label-info">简介</span> {{good.description}}</p>
+                            <p><span class="label label-warning">类别</span> {{good.category}}</p>
                             <p><span class="label label-success">库存</span> 剩余 {{good.stock}} 件</p>
+                            <p><span class="label label-danger">店铺</span> {{good.shop}}</p>
                             <p class="text-right">
-                                <a href="#" class="btn btn-default" role="button" @click="showPurchaseModal(good.gid)">立即购买</a>
-                                <a href="#" class="btn btn-primary" role="button" @click="showCartModal(good.gid)">加入购物车</a>
+                                <a href="#" class="btn btn-default" role="button" @click="showPurchaseModal(good.gid, index)">立即购买</a>
+                                <a href="#" class="btn btn-primary" role="button" @click="showCartModal(good.gid, index)">加入购物车</a>
                             </p>
                         </div>
                     </div>
@@ -231,6 +233,20 @@
                 </div>
             </div>
 
+            <div id="tab-allGoods-warning" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">提示</h4>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div> <!-- Home Tab End -->
 
         <div role="tabpanel" class="tab-pane fade" id="tab-search">
@@ -239,16 +255,18 @@
                     <h1>搜索 <small>{{search.display}}</small></h1>
                 </div>
                 <div v-if="goods.length > 0" class="waterfall">
-                    <div class="thumbnail" v-for="(good) in goods">
+                    <div class="thumbnail" v-for="(good, index) in goods">
                         <img :src="good.image" :alt="good.name">
                         <div class="caption">
                             <h3>{{good.name}}</h3>
                             <h4>¥{{good.price}}.00</h4>
                             <p><span class="label label-info">简介</span> {{good.description}}</p>
+                            <p><span class="label label-warning">类别</span> {{good.category}}</p>
                             <p><span class="label label-success">库存</span> 剩余 {{good.stock}} 件</p>
+                            <p><span class="label label-danger">店铺</span> {{good.shop}}</p>
                             <p class="text-right">
-                                <a href="#" class="btn btn-default" role="button" @click="showPurchaseModal(good.gid)">立即购买</a>
-                                <a href="#" class="btn btn-primary" role="button" @click="showCartModal(good.gid)">加入购物车</a>
+                                <a href="#" class="btn btn-default" role="button" @click="showPurchaseModal(good.gid, index)">立即购买</a>
+                                <a href="#" class="btn btn-primary" role="button" @click="showCartModal(good.gid, index)">加入购物车</a>
                             </p>
                         </div>
                     </div>
@@ -277,6 +295,20 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                             <button type="button" class="btn btn-primary" data-loading-text="......." @click="commit">确认</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-search-warning" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">提示</h4>
+                        </div>
+                        <div class="modal-body">
+                            ...
                         </div>
                     </div>
                 </div>
@@ -356,6 +388,20 @@
                 </div><!-- /.container-fluid -->
             </nav>
 
+            <div id="tab-cart-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">提示</h4>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div> <!-- Cart Tab End -->
 
         <div role="tabpanel" class="tab-pane fade" id="tab-user">
@@ -418,7 +464,13 @@
             <div id="tab-user-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
-                        ...
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">提示</h4>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
                     </div>
                 </div>
             </div>

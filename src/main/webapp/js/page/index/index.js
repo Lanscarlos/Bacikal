@@ -36,6 +36,11 @@ const vue = new Vue({
                     // 设置延迟 500 毫秒后执行代码
                     setTimeout(function(){
                         search.goods = data.goods
+                        data.goods.forEach((element, index, array) => {
+                            if(element.image == null || element.image == '') {
+                                element.image = 'image/good/default.webp'
+                            }
+                        })
                         search.search.display = vue.search.val
                         $('#tab-controller-search').tab('show')
                         $btn.button('reset')

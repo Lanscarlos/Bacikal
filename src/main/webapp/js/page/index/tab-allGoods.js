@@ -5,6 +5,7 @@ const allGoods = new Vue({
             modal: {
                 type: '',
                 gid: '',
+                index: -1,
                 loading: false,
                 amount: 1
             },
@@ -35,20 +36,32 @@ const allGoods = new Vue({
     methods: {
 
         // 弹出购买框
-        showPurchaseModal: function(gid){
+        showPurchaseModal: function(gid, index){
+            if(this.goods[index].stock <= 0) {
+                $('#tab-allGoods-warning .modal-body').html('商品库存已经见底啦! 请选择其他商品吧!')
+                $('#tab-allGoods-warning').modal('show')
+                return false
+            }
             this.modal.type = 'purchase'
             this.modal.gid = gid
+            this.modal.index = index
             $('#tab-allGoods-Modal').modal('show')
         },
-        showCartModal: function(gid){
+        showCartModal: function(gid, index){
+            if(this.goods[index].stock <= 0) {
+                $('#tab-allGoods-warning .modal-body').html('商品库存已经见底啦! 请选择其他商品吧!')
+                $('#tab-allGoods-warning').modal('show')
+                return false
+            }
             this.modal.type = 'cart'
             this.modal.gid = gid
+            this.modal.index = index
             $('#tab-allGoods-Modal').modal('show')
         },
         
         // 增加 / 减少数量
         addAmount: function(){
-            if(this.modal.loading) { return }
+            if(this.modal.loading || this.goods[this.modal.index].stock <= this.modal.amount) { return }
             this.modal.amount += 1
         },
         subAmount: function(){
@@ -88,5 +101,10 @@ $('#tab-controller-goods-all').on('show.bs.tab', function(e){
         method: 'selectAll'
     },function(data){
         allGoods.goods = data.goods
+        data.goods.forEach((element, index, array) => {
+            if(element.image == null || element.image == '') {
+                element.image = 'image/good/default.webp'
+            }
+        })
     })
 })

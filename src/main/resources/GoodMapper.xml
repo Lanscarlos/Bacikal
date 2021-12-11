@@ -52,4 +52,15 @@
         update good set stock = #{stock} where gid = #{gid}
     </update>
 
+    <select id="getAllShop" resultType="top.lanscarlos.pojo.Shop">
+        select *
+        from shop;
+    </select>
+
+    <select id="getAllCategory" resultType="top.lanscarlos.pojo.Category">
+        select *
+        from category;
+    </select>
+
+
 </mapper>

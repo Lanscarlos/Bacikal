@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.ibatis.session.SqlSession;
 import top.lanscarlos.dao.GoodDAO;
+import top.lanscarlos.pojo.Category;
 import top.lanscarlos.pojo.Good;
+import top.lanscarlos.pojo.Shop;
 import top.lanscarlos.utils.MybatisUtils;
 
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,6 +25,9 @@ import java.util.List;
 public class GoodServlet extends HttpServlet {
 
     static Gson gson = new Gson();
+
+    static HashMap<String, String> shop = new HashMap<>(); // 存储商家信息
+    static HashMap<String, String> category = new HashMap<>(); // 存储分类信息
 
 //    String gid="0001";
     @Override
@@ -34,6 +40,18 @@ public class GoodServlet extends HttpServlet {
         response.setContentType("application/json;charset=utf-8");
         SqlSession sqlSession = MybatisUtils.getSqlSession();
         GoodDAO dao = sqlSession.getMapper(GoodDAO.class);
+
+        if (shop.isEmpty()) {
+            for (Shop shop : dao.getAllShop()) {
+                GoodServlet.shop.put(shop.getSid(), shop.getName());
+            }
+        }
+        if (category.isEmpty()) {
+            for (Category category : dao.getAllCategory()) {
+                GoodServlet.category.put(category.getCid(), category.getName());
+            }
+        }
+
         //查询
         String name="%"+request.getParameter("name")+"%";
         String gid = request.getParameter("gid");
@@ -49,26 +67,44 @@ public class GoodServlet extends HttpServlet {
         switch (request.getParameter("method")){
             case "selectAll":
                 List<Good> goods = dao.selectAll();
+                for (Good good : goods) {
+                    good.setShop(GoodServlet.shop.get(good.getSid()));
+                    good.setCategory(GoodServlet.category.get(good.getCid()));
+                }
                 json.addProperty("result",true);
                 json.add("goods", gson.toJsonTree(goods));
                 break;
             case "selectByGid":
                 Good byGid = dao.selectByGid(gid);
+                byGid.setShop(GoodServlet.shop.get(byGid.getSid()));
+                byGid.setCategory(GoodServlet.category.get(byGid.getCid()));
                 json.addProperty("result",true);
                 json.add("good", gson.toJsonTree(byGid));
                 break;
             case "selectByName":
                 List<Good> byName = dao.selectByName(name);
+                for (Good good : byName) {
+                    good.setShop(GoodServlet.shop.get(good.getSid()));
+                    good.setCategory(GoodServlet.category.get(good.getCid()));
+                }
                 json.addProperty("result",true);
                 json.add("goods", gson.toJsonTree(byName));
                 break;
             case "selectByCategory":
                 List<Good> byCategory = dao.selectByCategory(category);
+                for (Good good : byCategory) {
+                    good.setShop(GoodServlet.shop.get(good.getSid()));
+                    good.setCategory(GoodServlet.category.get(good.getCid()));
+                }
                 json.addProperty("result",true);
                 json.add("goods", gson.toJsonTree(byCategory));
                 break;
             case "selectByCondition":
                 List<Good> byCondition = dao.selectByCondition(gid, name, category);
+                for (Good good : byCondition) {
+                    good.setShop(GoodServlet.shop.get(good.getSid()));
+                    good.setCategory(GoodServlet.category.get(good.getCid()));
+                }
                 json.addProperty("result",true);
                 json.add("goods", gson.toJsonTree(byCondition));
                 break;

@@ -6,6 +6,7 @@ const search = new Vue({
                 display: '',
                 type: '',
                 gid: '',
+                index: -1,
                 loading: false,
                 amount: 1
             },
@@ -42,12 +43,22 @@ const search = new Vue({
     methods: {
 
         // 弹出购买框
-        showPurchaseModal: function(gid){
+        showPurchaseModal: function(gid, index){
+            if(this.goods[index].stock <= 0) {
+                $('#tab-search-warning .modal-body').html('商品库存已经见底啦! 请选择其他商品吧!')
+                $('#tab-search-warning').modal('show')
+                return false
+            }
             this.modal.type = 'purchase'
             this.modal.gid = gid
             $('#tab-search-Modal').modal('show')
         },
-        showCartModal: function(gid){
+        showCartModal: function(gid, index){
+            if(this.goods[index].stock <= 0) {
+                $('#tab-search-warning .modal-body').html('商品库存已经见底啦! 请选择其他商品吧!')
+                $('#tab-search-warning').modal('show')
+                return false
+            }
             this.modal.type = 'cart'
             this.modal.gid = gid
             $('#tab-search-Modal').modal('show')
@@ -55,7 +66,7 @@ const search = new Vue({
         
         // 增加 / 减少数量
         addAmount: function(){
-            if(this.modal.loading) { return }
+            if(this.modal.loading || this.goods[this.modal.index].stock <= this.modal.amount) { return }
             this.modal.amount += 1
         },
         subAmount: function(){

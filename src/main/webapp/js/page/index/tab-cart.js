@@ -81,6 +81,8 @@ const cart = new Vue({
                 gids.push(cart.carts[index].gid)
             }
             if(gids.length <= 0) {
+                $('#tab-cart-modal .modal-body').html('请先选择要删除的商品')
+                $('#tab-cart-modal').modal('show')
                 $btn.button('reset')
                 return
             }
@@ -106,7 +108,9 @@ const cart = new Vue({
         /**
          * 结算
          */
-        commit: function() {
+        commit: function(event) {
+            let $btn = event.target.nodeName == 'BUTTON' ? $(event.target).button('loading') : $(event.path[1]).button('loading')
+
             // 遍历已勾选的商品
             let gids = []
             this.carts.forEach((element, index, array) => {
@@ -130,6 +134,9 @@ const cart = new Vue({
             })
 
             if(gids == null || gids.length <= 0) {
+                $('#tab-cart-modal .modal-body').html('请先选择要购买的商品')
+                $('#tab-cart-modal').modal('show')
+                $btn.button('reset')
                 return
             }
 
@@ -159,6 +166,14 @@ const cart = new Vue({
                     i--
                 }
             }
+            
+            $('#tab-cart-modal .modal-body').html('结算成功!!')
+            $('#tab-cart-modal').modal('show')
+            setTimeout(function(){
+                $('#tab-cart-modal').modal('hide')
+                $('#tab-controller-purchase').tab('show')
+            }, 2000);
+            $btn.button('reset')
         },
         select: function(event, index) {
             if(index < 0) {

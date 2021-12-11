@@ -24,18 +24,18 @@ const vue = new Vue({
                 }, 3000);
                 $btn.button('reset')
             }else{
-                // 发送请求...
-                //
-                // 代码...待编写...
-                //
+                // 显示 搜索中... 面板遮挡
                 $('#tab-controller-search-cover').tab('show')
+
+                // 发送Post请求...
                 $.post(url + 'good',{
                     method: 'selectByName',
                     name: vue.search.val
                 },function(data){
+
+                    // 设置延迟 500 毫秒后执行代码
                     setTimeout(function(){
-                        console.log(eval(data.goods))
-                        search.goods = eval(data.goods)
+                        search.goods = data.goods
                         search.search.display = vue.search.val
                         $('#tab-controller-search').tab('show')
                         $btn.button('reset')
@@ -49,11 +49,13 @@ const vue = new Vue({
          * 用户登出
          */
         logout: function() {
-            $.post(url + 'login', {
-                method: 'user-logout'
+            $.post(url + 'user', {
+                method: 'logout'
             }, function(data) {
                 // 判断返回的结果 是否已成功登出
                 if(data.result) {
+                    
+                    // 跳转到登录页面
                     $(location).delay(500).attr('href', 'login.html')
                 }
             })

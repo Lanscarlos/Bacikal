@@ -2,6 +2,8 @@ package top.lanscarlos.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import org.apache.ibatis.session.SqlSession;
 import top.lanscarlos.dao.UserDAO;
 import top.lanscarlos.pojo.User;
@@ -19,8 +21,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@WebServlet(name = "LoginServlet", value = "/user")
+@WebServlet(name = "UserServlet", value = "/user")
 public class UserServlet extends HttpServlet {
+    static Gson gson = new Gson();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -103,6 +106,50 @@ public class UserServlet extends HttpServlet {
                 }
                 sqlSession.commit();
                 break;
+            case "info": // 查询用户信息 [登录的前提下]
+                String uid = request.getParameter("uid");
+                if ("".equals(uid)) {
+                    uid = request.getSession().getAttribute("uid").toString();
+                }
+                user = dao.getUserById(uid);
+                if (user != null) {
+                    json.addProperty("result", true);
+                    json.addProperty("message", "查询成功！");
+                    json.add("user", gson.toJsonTree(user));
+                }else {
+                    // 用户不存在
+                    json.addProperty("result", false);
+                    json.addProperty("message", "用户不存在！");
+                }
+                break;
+            case "update":
+                uid = request.getParameter("uid");
+                if ("".equals(uid)) {
+                    uid = request.getSession().getAttribute("uid").toString();
+                }
+                user = dao.getUserById(uid);
+                if (user != null) {
+                    // 刷新数据
+                    user.setGender(request.getParameter("gender"));
+                    user.setAddress(request.getParameter("address"));
+
+                    if (dao.updateUser(user) > 0) {
+                        json.addProperty("result", true);
+                        json.addProperty("message", "保存成功！");
+                        sqlSession.commit();
+                    }else {
+                        json.addProperty("result", false);
+                        json.addProperty("message", "保存失败！");
+                        sqlSession.rollback();
+                    }
+                    json.add("user", gson.toJsonTree(user));
+
+                }else {
+                    // 用户不存在
+                    json.addProperty("result", false);
+                    json.addProperty("message", "用户不存在！");
+                }
+                break;
             default:
                 // 未知的请求
                 json.addProperty("result", false);
@@ -110,6 +157,7 @@ public class UserServlet extends HttpServlet {
                 break;
         }
 
+        sqlSession.close();
         response.getWriter().println(json);
     }
 }

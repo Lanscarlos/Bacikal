@@ -4,8 +4,8 @@ let username = new InputObject('username', function(){
         username.showTip('请输入用户名')
         username.setState(false)
     }else {
-        $.post(url + 'register', {
-            method: 'check-user',
+        $.post(url + 'user', {
+            method: 'check',
             username: vue.username.val
         },function(data){
             if(data.result) {
@@ -57,8 +57,8 @@ $('#register').on('click', function(){
         $btn.button('reset')
         return
     }
-    $.post(url + 'register', {
-        method: 'register-user',
+    $.post(url + 'user', {
+        method: 'register',
         username: vue.username.val,
         password: vue.password.val,
         gender: vue.gender,

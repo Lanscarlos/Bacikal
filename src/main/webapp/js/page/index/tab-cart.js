@@ -31,17 +31,21 @@ const cart = new Vue({
     methods: {
         add: function(event, index){
             let $btn = event.target.nodeName == 'BUTTON' ? $(event.target).button('loading') : $(event.path[1]).button('loading')
-            this.carts[index].amount += 1
-
-            $.post(url + 'cart', {
-                method: 'increaseInfo',
-                uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
-                gid: this.carts[index].gid,
-                number: 1
-            }, function(data){
+            if(this.carts[index].stock > this.carts[index].amount) {
+                this.carts[index].amount += 1
+    
+                $.post(url + 'cart', {
+                    method: 'increaseInfo',
+                    uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                    gid: this.carts[index].gid,
+                    number: 1
+                }, function(data){
+                    $btn.button('reset')
+                    cart.calcSum()
+                })
+            }else {
                 $btn.button('reset')
-                cart.calcSum()
-            })
+            }
         },
         subtract: function(event, index){
             let $btn = event.target.nodeName == 'BUTTON' ? $(event.target).button('loading') : $(event.path[1]).button('loading')
@@ -99,6 +103,63 @@ const cart = new Vue({
                 cart.calcSum()
             })
         },
+        /**
+         * 结算
+         */
+        commit: function() {
+            // 遍历已勾选的商品
+            let gids = []
+            this.carts.forEach((element, index, array) => {
+                if(element.check) {
+                    gids.push(element.gid)
+                    // 提交订单
+                    $.post(url + 'purchase', {
+                        method: 'add',
+                        uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                        gid: element.gid,
+                        price: element.price,
+                        amount: element.amount
+                    }, function(data){
+                        console.log('购买...')
+                        console.log(data)
+                        if(data.result) {
+                            // 购买成功
+                        }
+                    })
+                }
+            })
+
+            if(gids == null || gids.length <= 0) {
+                return
+            }
+
+            // 删除购物车相关商品
+            $.post(url + 'cart', {
+                method: 'deleteByIds',
+                uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                gids: gids
+            }, function(data){
+                console.log('删除...')
+                console.log(data)
+            })
+            
+            let item;
+            for(var i=0; i<cart.carts.length; i++) {
+                item = cart.carts[i]
+                if(gids.indexOf(item.gid) >= 0) {
+                    $.post(url + 'good', {
+                        method: 'update',
+                        gid: item.gid,
+                        stock: item.stock - item.amount
+                    }, function(data){
+                        console.log('更新库存...')
+                        console.log(data)
+                    })
+                    cart.carts.splice(i, 1)
+                    i--
+                }
+            }
+        },
         select: function(event, index) {
             if(index < 0) {
                 // 选择所有
@@ -129,8 +190,8 @@ $('#tab-controller-cart').on('show.bs.tab', function(e){
         method: 'selectInfo',
         uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83'
     },function(data){
-        let carts = eval(data.carts)
-        let goods = eval(data.goods)
+        let carts = data.carts
+        let goods = data.goods
         goods.forEach((element, index, array) => {
             element.amount = carts[index].amount
         })

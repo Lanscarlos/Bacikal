@@ -29,8 +29,8 @@ $('#login').on('click', function(){
         $btn.button('reset')
         return
     }
-    $.post(url + 'login',{
-        method: 'user-login',
+    $.post(url + 'user',{
+        method: 'login',
         username: vue.username.val,
         password: vue.password.val
     },function(data){

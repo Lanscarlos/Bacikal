@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.ibatis.session.SqlSession;
 import top.lanscarlos.dao.GoodDAO;
-import top.lanscarlos.dao.UserDAO;
 import top.lanscarlos.pojo.Good;
 import top.lanscarlos.utils.MybatisUtils;
 
@@ -21,6 +20,9 @@ import java.util.List;
  */
 @WebServlet(name = "GoodServlet",urlPatterns = "/good")
 public class GoodServlet extends HttpServlet {
+
+    static Gson gson = new Gson();
+
 //    String gid="0001";
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,38 +46,53 @@ public class GoodServlet extends HttpServlet {
         JsonObject json=new JsonObject();
 //        json.addProperty("goods",new Gson().toJson(goods));
 
-        String method = request.getParameter("method");
-        if (method !="" && method !=null ){
-            switch (method){
-                case "selectAll":
-                    List<Good> goods = dao.selectAll();
-                    json.addProperty("goods",new  Gson().toJson(goods));
+        switch (request.getParameter("method")){
+            case "selectAll":
+                List<Good> goods = dao.selectAll();
+                json.addProperty("result",true);
+                json.add("goods", gson.toJsonTree(goods));
+                break;
+            case "selectByGid":
+                Good byGid = dao.selectByGid(gid);
+                json.addProperty("result",true);
+                json.add("good", gson.toJsonTree(byGid));
+                break;
+            case "selectByName":
+                List<Good> byName = dao.selectByName(name);
+                json.addProperty("result",true);
+                json.add("goods", gson.toJsonTree(byName));
+                break;
+            case "selectByCategory":
+                List<Good> byCategory = dao.selectByCategory(category);
+                json.addProperty("result",true);
+                json.add("goods", gson.toJsonTree(byCategory));
+                break;
+            case "selectByCondition":
+                List<Good> byCondition = dao.selectByCondition(gid, name, category);
+                json.addProperty("result",true);
+                json.add("goods", gson.toJsonTree(byCondition));
+                break;
+            case "update":
+                Good good = dao.selectByGid(gid);
+                if (good != null) {
+
+                    int stock = Integer.parseInt(request.getParameter("stock"));
+                    good.setStock(stock);
+                    dao.update(good);
+                    sqlSession.commit();
+
                     json.addProperty("result",true);
-                    break;
-                case "selectByGid":
-                    Good byGid = dao.selectByGid(gid);
-                    json.addProperty("good",new Gson().toJson(byGid));
-                    json.addProperty("result",true);
-                    break;
-                case "selectByName":
-                    List<Good> byName = dao.selectByName(name);
-                    json.addProperty("goods",new Gson().toJson(byName));
-                    json.addProperty("result",true);
-                    break;
-                case "selectByCategory":
-                    List<Good> byCategory = dao.selectByCategory(category);
-                    json.addProperty("goods",new Gson().toJson(byCategory));
-                    json.addProperty("result",true);
-                    break;
-                case "selectByCondition":
-                    List<Good> byCondition = dao.selectByCondition(gid, name, category);
-                    json.addProperty("goods",new Gson().toJson(byCondition));
-                    json.addProperty("result",true);
-                    break;
-                default:
+                    json.addProperty("message","更新成功");
+                    json.add("good", gson.toJsonTree(good));
+                }else {
                     json.addProperty("result",false);
-                    break;
-            }
+                    json.addProperty("message","更新失败");
+                }
+                break;
+            default:
+                json.addProperty("result",false);
+                json.addProperty("message","未知的请求");
+                break;
         }
 
         /**

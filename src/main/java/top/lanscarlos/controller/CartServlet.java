@@ -24,6 +24,8 @@ import java.util.Map;
 @WebServlet(name = "CartServlet",urlPatterns = "/cart")
 public class CartServlet extends HttpServlet {
 
+    static Gson gson = new Gson();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.getWriter().println("not allow to get request!");
@@ -52,28 +54,27 @@ public class CartServlet extends HttpServlet {
         String add_time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
         JsonObject json = new JsonObject();
-        String method = request.getParameter("method");
-        if (method != "" && method !=null){
-            switch (method){
-                case "selectInfo":
-                    /*查询信息*/
-                    List<Cart> carts = cdao.selectByUid(uid);
+
+        switch (request.getParameter("method")){
+            case "selectInfo":
+                /*查询信息*/
+                List<Cart> carts = cdao.selectByUid(uid);
 //                    List<String> list = new ArrayList<String>();
-                    List<Good> goodList = new ArrayList<Good>();
-                    for (Cart cart : carts) {
-                        String cartGid = cart.getGid();
-                        Good goodInfo = gdao.selectByGid(cartGid);
-                        goodList.add(goodInfo);
-                    }
+                List<Good> goodList = new ArrayList<Good>();
+                for (Cart cart : carts) {
+                    String cartGid = cart.getGid();
+                    Good goodInfo = gdao.selectByGid(cartGid);
+                    goodList.add(goodInfo);
+                }
 //                    }
-                    /*cart的用户信息*/
-                    json.addProperty("carts",new Gson().toJson(carts));
-                    /*用户购买的在good表对应的信息*/
-                    json.addProperty("goods",new Gson().toJson(goodList));
-                    json.addProperty("result",true);
-                    break;
-                case "deleteByIds":
-                    /*批量删除*/
+                json.addProperty("result",true);
+                /*cart的用户信息*/
+                json.add("carts", gson.toJsonTree(carts));
+                /*用户购买的在good表对应的信息*/
+                json.add("goods", gson.toJsonTree(goodList));
+                break;
+            case "deleteByIds":
+                /*批量删除*/
 //                    for(Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()){
 //                        for(String s : entry.getValue()){
 //                            System.out.println("key-> "+entry.getKey() + " value-> "+s);
@@ -81,50 +82,50 @@ public class CartServlet extends HttpServlet {
 //                    }
 //                    System.out.println("xxx1 -> " + request.getParameter("gids[]"));
 //                    System.out.println("xxx2 -> " + request.getParameterValues("gids[]"));
-                    String[] gids = request.getParameterValues("gids[]");
-                    int rows = cdao.deleteByIds(uid,gids);
-                    if (rows>0){
-                            //删除成功
+                String[] gids = request.getParameterValues("gids[]");
+                int rows = cdao.deleteByIds(uid,gids);
+                if (rows>0){
+                    //删除成功
+                    json.addProperty("result",true);
+                    sqlSession.commit();
+                }else {
+                    //删除失败
+                    json.addProperty("result",false);
+                    sqlSession.rollback();
+                }
+                break;
+            case "increaseInfo":
+                int number = Integer.parseInt(request.getParameter("number"));
+                String gid = request.getParameter("gid");
+                //判断插入还是添加
+                Cart isempty = cdao.isEmpty(gid);
+                Cart cart = new Cart();
+                cart.setUid(uid);
+                cart.setGid(gid);
+                cart.setAdd_time(add_time);
+                if (isempty!=null){
+                    int amount = cdao.selectAmountByGid(gid).getAmount();
+                    int newAmount = amount+number;
+                    cart.setAmount(newAmount);
+                    cdao.updateById(cart);
+                    json.addProperty("result",true);
+                    sqlSession.commit();
+                }else {
+                    cart.setAmount(number);
+                    int i = cdao.insertById(cart);
+                    if (i>0){
                         json.addProperty("result",true);
                         sqlSession.commit();
                     }else {
-                            //删除失败
                         json.addProperty("result",false);
                         sqlSession.rollback();
                     }
-                    break;
-                case "increaseInfo":
-                    int number = Integer.parseInt(request.getParameter("number"));
-                    String gid = request.getParameter("gid");
-                    //判断插入还是添加
-                    Cart isempty = cdao.isEmpty(gid);
-                    Cart cart = new Cart();
-                    cart.setUid(uid);
-                    cart.setGid(gid);
-                    cart.setAdd_time(add_time);
-                    if (isempty!=null){
-                        int amount = cdao.selectAmountByGid(gid).getAmount();
-                        int newAmount = amount+number;
-                        cart.setAmount(newAmount);
-                        cdao.updateById(cart);
-                        json.addProperty("result",true);
-                        sqlSession.commit();
-                    }else {
-                        cart.setAmount(number);
-                        int i = cdao.insertById(cart);
-                        if (i>0){
-                            json.addProperty("result",true);
-                            sqlSession.commit();
-                        }else {
-                            json.addProperty("result",false);
-                            sqlSession.rollback();
-                        }
-                    }
-                    break;
-                default:
-                    json.addProperty("result",false);
-                    break;
-            }
+                }
+                break;
+            default:
+                json.addProperty("result",false);
+                json.addProperty("message","未知的请求");
+                break;
         }
 
         /**

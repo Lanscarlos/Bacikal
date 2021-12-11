@@ -68,7 +68,6 @@ const allGoods = new Vue({
                 gid: this.modal.gid,
                 number: this.modal.amount
             }, function(data){
-                console.log(data)
                 allGoods.modal.loading = false
                 $btn.button('reset')
                 $('#tab-allGoods-Modal').modal('hide')
@@ -88,7 +87,6 @@ $('#tab-controller-goods-all').on('show.bs.tab', function(e){
     $.post(url + 'good',{
         method: 'selectAll'
     },function(data){
-        console.log(eval(data.goods))
-        allGoods.goods = eval(data.goods)
+        allGoods.goods = data.goods
     })
 })

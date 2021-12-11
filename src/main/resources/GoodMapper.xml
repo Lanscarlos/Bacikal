@@ -48,4 +48,8 @@
         </where>
     </select>
 
+    <update id="update" parameterType="top.lanscarlos.pojo.Good">
+        update good set stock = #{stock} where gid = #{gid}
+    </update>
+
 </mapper>

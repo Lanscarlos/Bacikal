@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.lanscarlos.dao.PurchaseDAO">
+
+    <select id="getAllPurchase" resultType="top.lanscarlos.pojo.Purchase">
+        select * from purchase where uid = #{uid}
+    </select>
+
+    <select id="getPurchase" resultType="top.lanscarlos.pojo.Purchase">
+        select * from purchase where pid = #{pid}
+    </select>
+
+    <insert id="addPurchase" parameterType="top.lanscarlos.pojo.Purchase">
+        insert into purchase (pid, uid, gid, time, price, amount, sum) values (#{pid}, #{uid}, #{gid}, #{time}, #{price}, #{amount}, #{sum})
+    </insert>
+
+    <delete id="deletePurchase">
+        delete from purchase where pid = #{pid}
+    </delete>
+
+</mapper>

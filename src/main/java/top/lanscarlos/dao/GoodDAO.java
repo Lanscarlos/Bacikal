@@ -60,4 +60,6 @@ public interface GoodDAO {
      * @return
      */
 //    Good insert(String gid,String sid,String name,String description,String image,String stock,String puaway_time);
+
+    int update(Good good);
 }

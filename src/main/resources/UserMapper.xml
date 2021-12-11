@@ -9,7 +9,7 @@
     </select>
 
     <select id="getUserById" resultType="top.lanscarlos.pojo.User">
-        select * from user where uid = #{iid}
+        select * from user where uid = #{uid}
     </select>
 
     <select id="getUserByName" resultType="top.lanscarlos.pojo.User">
@@ -19,5 +19,9 @@
     <insert id="addUser" parameterType="top.lanscarlos.pojo.User">
         insert into user (uid, name, password, gender, address, reg_time) values (#{uid}, #{name}, #{password}, #{gender}, #{address}, #{reg_time})
     </insert>
+
+    <update id="updateUser" parameterType="top.lanscarlos.pojo.User">
+        update user set gender = #{gender}, address = #{address} where uid = #{uid}
+    </update>
 
 </mapper>

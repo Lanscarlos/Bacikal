@@ -9,10 +9,12 @@
     <link rel="stylesheet/less" type="text/css" href="less/index/tab-allGoods.less" />
     <link rel="stylesheet/less" type="text/css" href="less/index/tab-search.less" />
     <link rel="stylesheet/less" type="text/css" href="less/index/tab-cart.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/index/tab-user.less" />
     <script src="depandencies/less.min.js"></script>
     <script src="depandencies/tooltip.js" type="model"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-    <script src="depandencies/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <!-- <script src="depandencies/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script> -->
+    <script src="depandencies/bootstrap.min.js" crossorigin="anonymous"></script>
     
     <!-- 初始化提示工具 -->
     <script>
@@ -97,6 +99,10 @@
                             </div>
                         </a>
                         <ul class="dropdown-menu">
+                            <li role="presentation"><a id="tab-controller-user" href="#tab-user" aria-controls="tab-user" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                我的信息
+                            </a></li>
                             <li role="presentation"><a href="#tab-purchase" aria-controls="tab-purchase" role="tab" data-toggle="tab">
                                 <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
                                 我的订单
@@ -341,7 +347,7 @@
                                     <span class="cart-sum">¥ {{sum}}.00</span>
                                 </p>
                             </div>
-                            <button id="btn-search" type="submit" class="btn btn-primary" data-loading-text="结算中...">
+                            <button id="btn-search" type="submit" class="btn btn-primary" data-loading-text="结算中..." @click="commit">
                                 <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
                                 结算
                             </button>
@@ -352,6 +358,73 @@
 
         </div> <!-- Cart Tab End -->
 
+        <div role="tabpanel" class="tab-pane fade" id="tab-user">
+            <div class="container">
+                <div class="page-header">
+                    <h1>我的信息 <small>你的信息都在这里哦!</small></h1>
+                </div>
+                <div class="user-avatar">
+                    <img src="svg/undraw_male_avatar_323b.svg" height="256">
+                </div>
+                <div class="user-info">
+                    <div class="user-info-item">
+                        <h4>昵称</h4>
+                        <input type="text" class="form-control" v-model="user.name" readonly>
+                    </div>
+                    <div class="user-info-item">
+                        <h4>性别</h4>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="radio" id="checkboxSuccess" name="gender" value="保密" v-model="user.gender">
+                                        保密
+                                    </label>
+                                    <label>
+                                        <input type="radio" id="checkboxSuccess" name="gender" value="男" v-model="user.gender">
+                                        男孩
+                                    </label>
+                                    <label>
+                                        <input type="radio" id="checkboxSuccess" name="gender" value="女" v-model="user.gender">
+                                        女孩
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-info-item">
+                        <h4>注册时间</h4>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                {{user.reg_time}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-info-item">
+                        <h4>收货地址</h4>
+                        <input type="text" class="form-control" v-model="user.address" placeholder="请填写收获地址...">
+                    </div>
+                    <!-- <div class="user-info-item">
+                        <h4>重置密码</h4>
+                        <input type="password" class="form-control" v-model="user.address" placeholder="请填写密码">
+                        <input type="password" class="form-control" v-model="user.address" placeholder="请填写密码">
+                    </div> -->
+                    <div class="user-info-item">
+                        <button type="button" class="btn btn-primary" @click="save">保存更改</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-user-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        ...
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- Purchase Tab End -->
+
         <div role="tabpanel" class="tab-pane fade" id="tab-purchase">
             <div class="container">
                 <div class="page-header">
@@ -359,6 +432,7 @@
                 </div>
             </div>
         </div> <!-- Purchase Tab End -->
+
     </div>
 
     <script src="js/page/index/index.js"></script>
@@ -366,5 +440,6 @@
     <script src="js/page/index/tab-allGoods.js"></script>
     <script src="js/page/index/tab-search.js"></script>
     <script src="js/page/index/tab-cart.js"></script>
+    <script src="js/page/index/tab-user.js"></script>
 </body>
 </html>

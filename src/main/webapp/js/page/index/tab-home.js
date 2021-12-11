@@ -10,20 +10,6 @@ const home = new Vue({
         }
     },
     methods: {
-        subtract: function(index){
-            
-        },
-        select: function(event) {
-            this.cart.carts[event.target.dataset.index].check = event.target.checked
-            this.cart.sum = 0
-            console.log('changed...')
-            this.cart.carts.forEach((element, index, array) => {
-                if(element.check) {
-                    this.cart.sum += element.price * element.amount
-                }else{
-                    // console.log('检测 - ' + index + ' -> false')
-                }
-            })
-        }
+        
     }
 })

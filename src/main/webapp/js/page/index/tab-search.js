@@ -75,7 +75,6 @@ const search = new Vue({
                 gid: this.modal.gid,
                 number: this.modal.amount
             }, function(data){
-                console.log(data)
                 search.modal.loading = false
                 $btn.button('reset')
                 $('#tab-search-Modal').modal('hide')

@@ -24,5 +24,6 @@
         <mapper resource="UserMapper.xml"/>
         <mapper resource="GoodMapper.xml"/>
         <mapper resource="CartMapper.xml"/>
+        <mapper resource="PurchaseMapper.xml"/>
     </mappers>
 </configuration>

@@ -83,6 +83,17 @@ public class PurchaseServlet extends HttpServlet {
                     sqlSession.rollback();
                 }
                 break;
+            case "delete":
+                pid = request.getParameter("pid");
+                if (dao.deletePurchase(pid) > 0) {
+                    sqlSession.commit();
+                    json.addProperty("result", true);
+                    json.addProperty("message", "删除成功");
+                }else {
+                    json.addProperty("result", false);
+                    json.addProperty("message", "删除失败");
+                }
+                break;
             default:
                 // 未知的请求
                 json.addProperty("result", false);

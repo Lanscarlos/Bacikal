@@ -10,16 +10,10 @@
         where uid = #{uid};
     </select>
 
-    <select id="selectAmountByGid" resultType="top.lanscarlos.pojo.Cart">
+    <select id="select" resultType="top.lanscarlos.pojo.Cart">
         select *
         from cart
-        where gid=#{gid};
-    </select>
-
-    <select id="isEmpty" resultType="top.lanscarlos.pojo.Cart">
-        select *
-        from cart
-        where gid=#{gid};
+        where gid = #{gid} and uid = #{uid};
     </select>
 
     <insert id="insertById">

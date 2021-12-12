@@ -1,5 +1,6 @@
 package top.lanscarlos.dao;
 
+import org.apache.ibatis.annotations.Param;
 import top.lanscarlos.pojo.User;
 
 import java.util.List;
@@ -8,9 +9,9 @@ public interface UserDAO {
 
     List<User> getAllUser();
 
-    User getUserById(String uid);
+    User getUserById(@Param("uid") String uid);
 
-    User getUserByName(String name);
+    User getUserByName(@Param("name") String name);
 
     int addUser(User user);
 

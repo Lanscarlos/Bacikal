@@ -82,7 +82,7 @@ const search = new Vue({
             
             $.post(url + 'cart', {
                 method: 'increaseInfo',
-                uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
                 gid: this.modal.gid,
                 number: this.modal.amount
             }, function(data){

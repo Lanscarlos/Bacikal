@@ -14,7 +14,7 @@
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="${driver}"/>
-                <property name="url" value="jdbc:mysql://${host}:${port}/${database}?useSSL=false&amp;characterEncoding=UTF-8&amp;useUnicode=true&amp;serverTimezone=GMT"/>
+                <property name="url" value="jdbc:mysql://${host}:${port}/${database}?useSSL=false&amp;characterEncoding=UTF-8&amp;useUnicode=true&amp;serverTimezone=GMT&amp;allowPublicKeyRetrieval=true"/>
                 <property name="username" value="${username}"/>
                 <property name="password" value="${password}"/>
             </dataSource>

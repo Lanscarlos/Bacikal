@@ -3,7 +3,10 @@ const user = new Vue({
     data() {
         return {
             user:{
-
+                name: '',
+                gender: '',
+                address: '',
+                reg_time: '',
             }
         }
     },
@@ -11,7 +14,7 @@ const user = new Vue({
         save: function(event) {
             $.post(url + 'user', {
                 method: 'update',
-                uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
                 gender: this.user.gender,
                 address: this.user.address,
             }, function(data) {
@@ -29,7 +32,7 @@ const user = new Vue({
 $('#tab-controller-user').on('show.bs.tab', function(e){
     $.post(url + 'user', {
         method: 'info',
-        uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83'
+        // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83'
     }, function(data) {
         user.user = data.user
     })

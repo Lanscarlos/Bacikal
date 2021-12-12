@@ -19,14 +19,14 @@ public interface GoodDAO {
      * @param gid
      * @return
      */
-    Good selectByGid(String gid);
+    Good selectByGid(@Param("gid") String gid);
 
     /**
      * 根据商品名称进行查询
      * @param name
      * @return
      */
-    List<Good> selectByName(String name);
+    List<Good> selectByName(@Param("name") String name);
 
 //    /**
 //     * 根据供应商sid进行查询
@@ -39,7 +39,7 @@ public interface GoodDAO {
      * @param name
      * @return
      */
-    List<Good> selectByCategory(String name);
+    List<Good> selectByCategory(@Param("name") String name);
 
     /**
      * 多条件查询

@@ -494,8 +494,11 @@
                     <li class="list-group-item" v-for="(purchase,index) in purchases">                      
                         <div class="purchase-info">
                             <div>
-                                <h3>订单号：{{purchase.pid}}</h3>
-                                <h4>单价：{{purchase.price}}.00￥</h4>
+                                <h3>订单号: {{purchase.pid}}</h3>
+                                <h4 style="margin-top: 30px;">商品: <strong>{{purchase.name}}</strong></h4>
+                                <h4>类别: {{purchase.category}}</h4>
+                                <h4>商铺: {{purchase.shop}}</h4>
+                                <h4>单价: {{purchase.price}}.00￥</h4>
                                 <h4>购买数量: {{purchase.amount}}</h4>
                                 <h4>总价: {{purchase.sum}}.00￥</h4>
                                 <h4>订单提交时间: {{purchase.time}}</h4>

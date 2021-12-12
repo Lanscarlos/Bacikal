@@ -5,17 +5,15 @@ import java.util.Arrays;
 public class Cart {
     private String uid;
     private String gid;
-    private String[] gids;
     private int amount;
     private String add_time;
 
     public Cart() {
     }
 
-    public Cart(String uid, String gid, String[] gids, int amount, String add_time) {
+    public Cart(String uid, String gid, int amount, String add_time) {
         this.uid = uid;
         this.gid = gid;
-        this.gids = gids;
         this.amount = amount;
         this.add_time = add_time;
     }
@@ -34,14 +32,6 @@ public class Cart {
 
     public void setGid(String gid) {
         this.gid = gid;
-    }
-
-    public String[] getGids() {
-        return gids;
-    }
-
-    public void setGids(String[] gids) {
-        this.gids = gids;
     }
 
     public int getAmount() {
@@ -65,7 +55,6 @@ public class Cart {
         return "Cart{" +
                 "uid='" + uid + '\'' +
                 ", gid='" + gid + '\'' +
-                ", gids=" + Arrays.toString(gids) +
                 ", amount=" + amount +
                 ", add_time='" + add_time + '\'' +
                 '}';

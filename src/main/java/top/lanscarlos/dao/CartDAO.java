@@ -12,14 +12,7 @@ public interface CartDAO {
      * @param uid
      * @return
      */
-    List<Cart> selectByUid(String uid);
-
-    /**
-     * 获取已有的amount
-     * @param gid
-     * @return
-     */
-    Cart selectAmountByGid(String gid);
+    List<Cart> selectByUid(@Param("uid") String uid);
 
     /*isEmpty和selectAmountByGid效果一样*/
 
@@ -28,7 +21,7 @@ public interface CartDAO {
      * @param gid
      * @return
      */
-    Cart isEmpty(String gid);
+    Cart select(@Param("uid") String uid, @Param("gid") String gid);
 
     /**
      * 根据uid和gid在购物页面进行批量删除
@@ -36,7 +29,7 @@ public interface CartDAO {
      * @param gids
      * @return
      */
-    int deleteByIds(@Param("uid") String uid,@Param("gids")String[] gids);
+    int deleteByIds(@Param("uid") String uid, @Param("gids") String[] gids);
 
     /**
      * 插入信息并且封装

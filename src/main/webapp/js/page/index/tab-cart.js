@@ -36,7 +36,7 @@ const cart = new Vue({
     
                 $.post(url + 'cart', {
                     method: 'increaseInfo',
-                    uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                    // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
                     gid: this.carts[index].gid,
                     number: 1
                 }, function(data){
@@ -53,7 +53,7 @@ const cart = new Vue({
                 this.carts[index].amount -= 1
                 $.post(url + 'cart', {
                     method: 'increaseInfo',
-                    uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                    // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
                     gid: this.carts[index].gid,
                     number: -1
                 }, function(data){
@@ -88,7 +88,7 @@ const cart = new Vue({
             }
             $.post(url + 'cart', {
                 method: 'deleteByIds',
-                uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
                 gids: gids
             }, function(data){
                 if(data.result) {
@@ -119,7 +119,7 @@ const cart = new Vue({
                     // 提交订单
                     $.post(url + 'purchase', {
                         method: 'add',
-                        uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                        // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
                         gid: element.gid,
                         price: element.price,
                         amount: element.amount
@@ -143,7 +143,7 @@ const cart = new Vue({
             // 删除购物车相关商品
             $.post(url + 'cart', {
                 method: 'deleteByIds',
-                uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
                 gids: gids
             }, function(data){
                 console.log('删除...')
@@ -203,7 +203,7 @@ const cart = new Vue({
 $('#tab-controller-cart').on('show.bs.tab', function(e){
     $.post(url + 'cart',{
         method: 'selectInfo',
-        uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83'
+        // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83'
     },function(data){
         let carts = data.carts
         let goods = data.goods

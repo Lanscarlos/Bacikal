@@ -3,7 +3,7 @@ const allPurchases = new Vue({
     data(){
         return{
             allSelect: false,
-            uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+            // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
             purchases:[
                 // {
                 //     name: '《MySQL从删库到跑路》',
@@ -23,7 +23,7 @@ const allPurchases = new Vue({
         selectAll:function (event,index) {
             $.post(url + 'purchase',{
                 method: 'select-all',
-                uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
+                // uid: '5df287fc-5ce2-476f-b236-85c4e75cdd83',
             },function(data){
                 allPurchases.purchases = data.purchases
                 console.log('查询……')
@@ -41,9 +41,16 @@ const allPurchases = new Vue({
 $('#tab-controller-purchase').on('show.bs.tab', function(e){
     $.post(url + 'purchase',{
         method: 'select-all',
-        uid:'5df287fc-5ce2-476f-b236-85c4e75cdd83'
+        // uid:'5df287fc-5ce2-476f-b236-85c4e75cdd83'
     },function(data){
         allPurchases.purchases = data.purchases
-
+        console.log(data)
+        data.goods.forEach((element, index, array) => {
+            allPurchases.purchases[index].category = element.category
+            allPurchases.purchases[index].description = element.description
+            allPurchases.purchases[index].image = element.image
+            allPurchases.purchases[index].name = element.name
+            allPurchases.purchases[index].shop = element.shop
+        })
     })
 })

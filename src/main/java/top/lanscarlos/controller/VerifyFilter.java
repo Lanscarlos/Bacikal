@@ -30,19 +30,19 @@ public class VerifyFilter implements Filter {
             return;
         }
 
-//        String url = ((HttpServletRequest) request).getRequestURL().toString();
-//        if(url.contains("/js/") || url.contains("/svg/") || url.contains("login") || url.contains("register")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//
-//        Object obj = ((HttpServletRequest) request).getSession().getAttribute("uid");
-//        if (obj == null) {
-//            // 未登录
-//            request.getRequestDispatcher("login.html").forward(request, response);
-//        }else {
+        String url = ((HttpServletRequest) request).getRequestURL().toString();
+        if(url.contains("/depandencies/") || url.contains("/js/") || url.endsWith("/user") || url.contains("/svg/") || url.contains("login") || url.contains("register")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        Object obj = ((HttpServletRequest) request).getSession().getAttribute("uid");
+        if (obj == null) {
+            // 未登录
+            request.getRequestDispatcher("login.html").forward(request, response);
+        }else {
             // 已登录
             chain.doFilter(request, response);
-//        }
+        }
     }
 }

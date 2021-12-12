@@ -10,6 +10,8 @@
     <link rel="stylesheet/less" type="text/css" href="less/index/tab-search.less" />
     <link rel="stylesheet/less" type="text/css" href="less/index/tab-cart.less" />
     <link rel="stylesheet/less" type="text/css" href="less/index/tab-user.less" />
+    <link rel="stylesheet/less" type="text/css" href="less/index/tab-purchase.less" />
+
     <script src="depandencies/less.min.js"></script>
     <script src="depandencies/tooltip.js" type="model"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
@@ -479,10 +481,34 @@
 
         <div role="tabpanel" class="tab-pane fade" id="tab-purchase">
             <div class="container">
+                <div class="head-center">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
                 <div class="page-header">
                     <h1>我的订单 <small>你下单的宝贝都在这里哦!</small></h1>
                 </div>
+                <ul v-if="purchases.length > 0" class="list-group">
+                    <li class="list-group-item" v-for="(purchase,index) in purchases">                      
+                        <div class="purchase-info">
+                            <div>
+                                <h3>订单号：{{purchase.pid}}</h3>
+                                <h4>单价：{{purchase.price}}.00￥</h4>
+                                <h4>购买数量: {{purchase.amount}}</h4>
+                                <h4>总价: {{purchase.sum}}.00￥</h4>
+                                <h4>订单提交时间: {{purchase.time}}</h4>
+                            </div>                          
+                        </div>
+                    </li>
+                </ul>
+                <div v-else style="text-align: center;">
+                    <img src="svg/undraw_page_not_found_re_e9o6.svg" height="300">
+                    <h2 style="margin: 50px auto 100px auto;">您未存在购买记录</h2>
+                </div>
             </div>
+            
         </div> <!-- Purchase Tab End -->
 
     </div>
@@ -492,6 +518,7 @@
     <script src="js/page/index/tab-allGoods.js"></script>
     <script src="js/page/index/tab-search.js"></script>
     <script src="js/page/index/tab-cart.js"></script>
+    <script src="js/page/index/tab-purchase.js"></script>
     <script src="js/page/index/tab-user.js"></script>
 </body>
 </html>
